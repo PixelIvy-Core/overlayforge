@@ -1,0 +1,52 @@
+name: OverlayForge
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/ai/Dockerfile
+    container_name: fastapi
+    networks:
+      - intern
+    restart: no
+
+  overlay:
+    build:
+      context: .
+      dockerfile: docker/Vite/Dockerfile
+    container_name: Vite
+    networks:
+      - intern
+    restart: no
+  redis:
+    image: redis:alpine
+    container_name: redis_db
+    command: redis-server --appendonly yes
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data:/data
+    restart: always
+    networks:
+      - intern
+  gonic:
+    image: sentriz/gonic:latest
+    environment:
+      - TZ
+      - GONIC_SCAN_WATCHER_ENABLED
+      # optionally, see more available env vars in the readme
+    ports:
+      - 4747:8080
+    volumes:
+      - ./data:/data # gonic db etc
+      - /path/to/music:/music:ro # your music
+      - /path/to/podcasts:/podcasts # your podcasts
+      - /path/to/playlists:/playlists # your playlists
+      - /path/to/cache:/cache # transcode / covers / etc cache dir
+    networks:
+      - intern
+
+networks:
+  intern:
+    name: intern
+    driver: bridge
