@@ -1,8 +1,19 @@
-export default function App() {
+import { Background, CamFrame, Footer } from "./components/Overlays";
+import { Dashboard } from "./components/Dashboard";
+import { ChatBox } from "./components/Chat";
+import { AlertBox } from "./components/Alerts";
+import { Routes, Route } from 'react-router-dom';
 
+export default function App() {
   return (
-    <>
-      lorem ipsum
-    </>
+    <Routes>
+      <Route path="/" element={<Dashboard/>} />
+      <Route path="/frame" element={<CamFrame/>}/>
+      <Route path="/back" element={<Background/>}/>
+      <Route path="/footer" element={<Footer/>} />
+      <Route path="/chat" element={<ChatBox/>} />
+      <Route path="/alerts" element={<AlertBox/>} />
+      <Route path="*" element={<div>Page not found</div>} />
+    </Routes>
   )
 }
