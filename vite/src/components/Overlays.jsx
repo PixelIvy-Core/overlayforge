@@ -1,40 +1,32 @@
-import '../styles/overlays.css'
 import {motion} from 'motion/react'
 
 export function CamFrame(){
     return(
         <div>
-            <div id="camframe"></div>
+            <div className='border-4 border-primary fixed w-150 h-100 bottom-0 right-0 m-1'></div>
         </div>
     )
 }
 
 export function Background(){
     return(
-        <div id="base">
-            <Particle/>
+        <div className='fixed w-full h-full bg-back'>
+            <Particle />
         </div>
     )
 }
 
 export function Footer(){
     return(
-        <div id="footer"></div>
+        <div className='fixed bottom-0 w-full h-8 bg-surface border-edge'></div>
     )
 }
 
-export function Particle(){
+function Particle(s, t, x){
+
     return (
         <motion.div
-            style={{
-                width: "200px",
-                height: "200px",
-                borderBottom: 'solid',
-                borderRight: 'solid',
-                backgroundColor: "var(--accent-col)",
-                borderColor: "var(--border-col)"
-            }}
-            
+            className='relative bg-surface border-2 border-edge size-6 max-w-3xs max-h-3xs m-1'  
         />
     )
 }

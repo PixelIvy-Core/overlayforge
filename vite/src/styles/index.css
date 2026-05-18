@@ -1,4 +1,13 @@
-@import "https://itspixelivy-projects.github.io/design-palette/shared_design.css";
+@import "tailwindcss";
+
+@theme{
+    --color-back: #1e1b2e;
+    --color-surface: #2d2640;
+    --color-primary: #a78bfa;
+    --color-accent: #34d399;
+    --color-text: #e9d5ff;
+    --color-edge: #4c1d95;
+}
 
 :root {
   font: 18px/145%;
