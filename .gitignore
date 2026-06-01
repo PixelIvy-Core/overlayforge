@@ -31,3 +31,4 @@ __pycache__
 # other
 
 /data/
+docker-compose.yml
