@@ -15,14 +15,14 @@ export function Background(){
             <Particle s="30" x="95" t={19} />
             <Particle s="15" x="30" t={12} />
             <Particle s="10" x="80" t={10} />
-            <Particle s="20" x="50" t={2} />
+            <Particle s="20" x="50" t={7} />
             <Particle s="25" x="80" t={6} />
             <Particle s="8" x="23" t={8} />
-            <Particle s="35" x="40" t={3} />
+            <Particle s="35" x="40" t={6} />
             <Particle s="12" x="5" t={11} />
             <Particle s="18" x="15" t={7} />
             <Particle s="22" x="22" t={9} />
-            <Particle s="14" x="38" t={4} />
+            <Particle s="14" x="38" t={11} />
             <Particle s="28" x="58" t={13} />
             <Particle s="16" x="67" t={5} />
             <Particle s="24" x="73" t={15} />
