@@ -10,8 +10,25 @@ export function CamFrame(){
 
 export function Background(){
     return(
-        <div className='fixed w-full h-full bg-back'>
-            <Particle />
+        <div className='fixed w-full h-full bg-back overflow-hidden'>
+            <Particle s="40" x="10" t={5}/>
+            <Particle s="30" x="95" t={19} />
+            <Particle s="15" x="30" t={12} />
+            <Particle s="10" x="80" t={10} />
+            <Particle s="20" x="50" t={2} />
+            <Particle s="25" x="80" t={6} />
+            <Particle s="8" x="23" t={8} />
+            <Particle s="35" x="40" t={3} />
+            <Particle s="12" x="5" t={11} />
+            <Particle s="18" x="15" t={7} />
+            <Particle s="22" x="22" t={9} />
+            <Particle s="14" x="38" t={4} />
+            <Particle s="28" x="58" t={13} />
+            <Particle s="16" x="67" t={5} />
+            <Particle s="24" x="73" t={15} />
+            <Particle s="9" x="86" t={6} />
+            <Particle s="19" x="91" t={8} />
+            <Particle s="26" x="47" t={10} />
         </div>
     )
 }
@@ -22,11 +39,25 @@ export function Footer(){
     )
 }
 
-function Particle(s, t, x){
+function Particle({s, t, x}){
 
     return (
         <motion.div
-            className='relative bg-surface border-2 border-edge size-6 max-w-3xs max-h-3xs m-1'  
+            className='absolute bg-surface border-2 border-edge'
+            style={{
+                width: `${s}px`,
+                height: `${s}px`,
+                left: `${x}vw`,
+                bottom: 0,
+            }}
+            initial={{ y: '100vh', opacity: 1 }}
+            animate={{ y: '-100vh', opacity: 0 }}
+            transition={{
+                duration: t,
+                ease: 'linear',
+                repeat: Infinity,
+                repeatType: 'loop',
+            }}
         />
     )
 }
