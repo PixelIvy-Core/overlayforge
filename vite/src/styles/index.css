@@ -22,7 +22,11 @@
     font-size: 16px;
   }
 }
-    
+  
+.root {
+  isolation: isolate;
+}
+
 body {
   margin: 0;
 }
