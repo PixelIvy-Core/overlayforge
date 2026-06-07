@@ -1,17 +1,19 @@
 from fastapi import FastAPI
-from fastapi.sse import EventSourceResponse
-from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from music_points import router as music
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 async def root():
-    return{"message": "lorem ipsum"}
+    return{"status": 200, "message": "API working"}
 
-@app.get("alert/stream")
-async def stream_alert():
-    yield 0
-
-@app.get("chat/stream")
-async def stream_chat():
-    yield 0
+app.include_router(music)
