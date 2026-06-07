@@ -1,6 +1,5 @@
 import {Button} from '@base-ui/react/button'
-import { gonic_password, gonic_username, MusicContext } from '../context/contexts'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export function Dashboard(){
     const [tracks, setTracks] = useState(null);
