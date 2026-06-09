@@ -4,32 +4,22 @@ import { useSSE } from "../hooks/useSSE";
 export function MusicBox(){  
     const API = import.meta.env.VITE_FASTAPI_URL;
 
-    const [currentID, setCurrentID] = useState("");
     const [trackInfo, setTrackInfo] = useState(null);
     const audioRef = useRef(null);
 
-    const sseURL = `${API}/music/getTrackInfo?curr_id=${currentID}`;
+    const sseURL = `${API}/music/getTrackInfo?curr_id=`;
     const stateURL = `${API}/music/getState`;
 
-    const { data: newTrack, error, isConnected } = useSSE(sseURL);
-    const { data: playData, playError, playIsConnected } = useSSE(stateURL);
+    const { data: newTrack } = useSSE(sseURL);
+    const { data: playData } = useSSE(stateURL);
 
     useEffect(() => {
-        console.log('SSE connection status:', isConnected, error);
-    }, [isConnected, error]);
-
-    useEffect(() => {
-        console.log('SSE connection status:', playIsConnected, playError);
-    }, [playIsConnected, playError]);
-
-    useEffect(() => {
-        if (newTrack && newTrack.id !== currentID) {
+        if (newTrack) {
             console.log('New track from SSE:', newTrack);
             // eslint-disable-next-line react-hooks/set-state-in-effect
-            setCurrentID(newTrack.id);
             setTrackInfo(newTrack);
         }
-    }, [newTrack, currentID]);
+    }, [newTrack]);
 
     useEffect(() => {
     const audio = audioRef.current;
