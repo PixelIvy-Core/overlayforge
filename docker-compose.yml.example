@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: docker/ai/Dockerfile
+      dockerfile: docker/API/Dockerfile
     container_name: fastapi
     networks:
       - intern
