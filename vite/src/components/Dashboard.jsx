@@ -5,7 +5,7 @@ import { useSSE } from '../hooks/useSSE';
 
 export function Dashboard(){
     const API = import.meta.env.VITE_FASTAPI_URL;
-    const [queue, setQueue] = useState({});
+    const [queue, setQueue] = useState([]);
 
     const refreshQueue = useCallback(() => {
         fetch(`${API}/music/getQueue`)
@@ -17,6 +17,12 @@ export function Dashboard(){
         refreshQueue();
     }, [refreshQueue]);
 
+    const queueItems = queue.map(song => 
+        <tr key={song.id}>
+            <td className="py-2 pr-4">{song.artist}</td>
+            <td className="py-2 pr-4">{song.title}</td>
+        </tr>);
+
     return(
         <div className="grid h-screen w-screen grid-rows-[auto_1fr_auto] gap-4 bg-back p-4">
             <header className="rounded-lg border-2 border-edge bg-surface px-4 py-3">
@@ -25,12 +31,12 @@ export function Dashboard(){
             </header>
 
             <main className="grid min-h-0 gap-4 lg:grid-cols-[1fr_1.2fr]">
-                <MusicQueue queue={queue} className='min-h-0 overflow-auto rounded-lg border-2 border-edge bg-surface p-4'/>
+                <MusicQueue queue={queueItems} className='min-h-0 overflow-auto rounded-lg border-2 border-edge bg-surface p-4'/>
                 <TrackList onAdd={refreshQueue} className='min-h-0 overflow-auto rounded-lg border-2 border-edge bg-surface p-4 scrollbar-none'/>
             </main>
 
             <footer className="rounded-lg border-2 border-edge bg-surface p-4">
-                <MusicControls className='w-full'/>
+                <MusicControls onSkip={refreshQueue} className='w-full'/>
             </footer>
          </div>
     );
@@ -81,7 +87,7 @@ function TrackList({onAdd, className = ''}){
     </div>)
 }
 
-function MusicControls({className = ''}){
+function MusicControls({onSkip, className = ''}){
     const API = import.meta.env.VITE_FASTAPI_URL;
     const [playing, setPlaying] = useState(false);
     const {data: currentTrack} = useSSE(`${API}/music/nowPlaying`)
@@ -109,6 +115,7 @@ function MusicControls({className = ''}){
             <Button className="flex h-12 w-12 items-center justify-center rounded-md border-2 border-edge bg-primary text-text transition-transform select-none hover:scale-105 hover:not-data-disabled:bg-neutral-100 active:scale-95 active:not-data-disabled:bg-neutral-200 focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-neutral-950 data-disabled:border-neutral-500 data-disabled:text-neutral-500"
                 onClick={() => {
                     fetch(`${API}/music/next`, {method: "POST"});
+                    onSkip()
             }}>
                 <FaForward className="text-lg"/>
             </Button>
@@ -118,11 +125,6 @@ function MusicControls({className = ''}){
 }
 
 function MusicQueue({queue, className = ''}){
-    const queueItems = queue.map(song => 
-        <tr key={song.id}>
-            <td className="py-2 pr-4">{song.artist}</td>
-            <td className="py-2 pr-4">{song.title}</td>
-        </tr>);
     return(
         <div className={className}>
         <div className="mb-3 flex items-center justify-between">
@@ -136,7 +138,7 @@ function MusicQueue({queue, className = ''}){
                 </tr>
             </thead>
             <tbody>
-            {queueItems}
+            {queue}
             </tbody>
         </table>
         </div>
