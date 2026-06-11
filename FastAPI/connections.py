@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os, redis, secrets
+import os, redis, secrets, requests
 from hashlib import md5
 load_dotenv()
 
@@ -21,3 +21,9 @@ def get_gonic_url(endpoint: str, id: str):
     token = md5((gonic_pswd + salt).encode()).hexdigest()
     url = f"{gonic_host}:{gonic_port}/rest/{endpoint}?u={gonic_user}&t={token}&s={salt}&c=overlayforge&id={id}"
     return url
+
+def get_gonic_info(url: str, tag: str):
+    response = requests.request("GET", url, params={"f": "json"})
+    payload = response.json()["subsonic-response"]
+    metadata = payload[tag]
+    return metadata
