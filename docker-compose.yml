@@ -6,6 +6,16 @@ services:
       context: .
       dockerfile: docker/API/Dockerfile
     container_name: fastapi
+    environment:
+      - GONIC_HOST=http://gonic
+      - GONIC_PORT=80
+      - GONIC_USER=${GONIC_USER}
+      - GONIC_PASSWORD=${GONIC_PASSWORD}
+      - EXTERNAL_HOST=${EXTERNAL_HOST}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - 8000:8000
     networks:
       - intern
     restart: no
@@ -14,10 +24,17 @@ services:
     build:
       context: .
       dockerfile: docker/Vite/Dockerfile
+      args:
+        VITE_FASTAPI_URL: ${VITE_FASTAPI_URL}
     container_name: Vite
+    environment:
+      - VITE_FASTAPI_URL=${VITE_FASTAPI_URL}
+    ports:
+      - 3000:3000
     networks:
       - intern
     restart: no
+
   redis:
     image: redis:alpine
     container_name: redis_db
@@ -29,20 +46,23 @@ services:
     restart: always
     networks:
       - intern
+
   gonic:
     image: sentriz/gonic:latest
     environment:
       - TZ
       - GONIC_SCAN_WATCHER_ENABLED
+      - GONIC_SCAN_AT_START_ENABLED
       # optionally, see more available env vars in the readme
     ports:
-      - 4747:8080
+      - 4747:4747
+      - 80:80
     volumes:
       - ./data:/data # gonic db etc
-      - /path/to/music:/music:ro # your music
-      - /path/to/podcasts:/podcasts # your podcasts
-      - /path/to/playlists:/playlists # your playlists
-      - /path/to/cache:/cache # transcode / covers / etc cache dir
+      - ./cache:/cache # transcode / covers / etc cache dir
+      - ./Gonic/music:/music:ro # your music
+      - ./Gonic/podcasts:/podcasts # your podcasts
+      - ./Gonic/playlists:/playlists # your playlists
     networks:
       - intern
 
