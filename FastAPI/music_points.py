@@ -5,11 +5,15 @@ from connections import get_redis, get_gonic_url, get_gonic_info
 from models import TrackInfo
 from config import *
 import asyncio as asc
+import os
+
+gonic_host = os.getenv("GONIC_HOST")
+external_host = os.getenv("EXTERNAL_HOST")
 
 router = APIRouter(prefix="/music", tags=["music"])
 
 def setTrackInfo(id: str, title: str, artist: str, source: str):
-    track = {"id": id, "title": title, "artist": artist, "source": source, "url":  get_gonic_url("stream", id)}
+    track = {"id": id, "title": title, "artist": artist, "source": source, "url":  str(get_gonic_url("stream", id)).replace(gonic_host, external_host)}
     with get_redis() as r:
         if not r:
             raise HTTPException(503, "Redis not reachable")
