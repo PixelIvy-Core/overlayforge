@@ -7,13 +7,13 @@ services:
       dockerfile: docker/API/Dockerfile
     container_name: fastapi
     environment:
-      - GONIC_HOST=http://gonic
-      - GONIC_PORT=80
+      - GONIC_HOST=${GONIC_HOST}
+      - GONIC_PORT=${GONIC_PORT}
       - GONIC_USER=${GONIC_USER}
       - GONIC_PASSWORD=${GONIC_PASSWORD}
       - EXTERNAL_HOST=${EXTERNAL_HOST}
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
     ports:
       - 8000:8000
     networks:
