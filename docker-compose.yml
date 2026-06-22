@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: docker/API/Dockerfile
+      dockerfile: Docker/API/Dockerfile
     container_name: fastapi
     environment:
       - GONIC_HOST=${GONIC_HOST}
@@ -23,7 +23,7 @@ services:
   overlay:
     build:
       context: .
-      dockerfile: docker/Vite/Dockerfile
+      dockerfile: Docker/Vite/Dockerfile
       args:
         VITE_FASTAPI_URL: ${VITE_FASTAPI_URL}
     container_name: Vite
