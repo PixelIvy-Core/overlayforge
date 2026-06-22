@@ -1,32 +1,57 @@
 # OverlayForge
 
-## Purpose
+OverlayForge is a small streaming overlay manager combining a FastAPI backend and a Vite + React frontend. It provides overlays and a simple local music player. Alerts and chat are not implemented yet and are on the project's roadmap.
 
-OverlayForge is a Streaming tool that provides Overlays, Alerts, a Chat window and a simple music player for local files.
+## Features
 
-## Architecture
+- Overlays web UI
+- Alerts (planned)
+- Chat panel (planned)
+- Simple local music player
 
-```mermaid
-flowchart LR
+## Quick Start (Recommended)
 
-c1("OBS")
-c2("Dashboard")
-n1["React Frontend"]
-n2["FastAPI Backend"]
-n3["Redis"]
-n4["Gonic Music Server"]
-e1("Twitch API")
+Requirements: Docker and Docker Compose
 
-e1 -->|EventSub| n2
+1. Build and start services:
 
-subgraph Docker
-n2 -->|Alerts, Overlays| n1
-n3
-n4 -->|Song title, Artist| n1
-n2 <-->|Access Token Management| n3
-n1 -->|Music Control| n4
-end
-
-n1 -->|Overlays, Alerts| c1
-n1 <-->|Basic controls| c2
+```bash
+docker-compose up --build
 ```
+
+2. Open the frontend at http://localhost:5173 (Vite default) and the API at http://localhost:8000
+
+## Local Development
+
+Backend (Python):
+
+```bash
+python -m venv .venv
+.
+.venv\\Scripts\\activate    # Windows
+pip install -r Docker/API/requirements.txt
+uvicorn FastAPI.api:app --reload --host 0.0.0.0 --port 8000
+```
+
+Frontend (Node):
+
+```bash
+cd vite
+npm install
+npm run dev
+```
+
+## Project Structure (high level)
+
+- `FastAPI/` — backend app entry points and models
+- `vite/` — React frontend built with Vite
+- `Docker/` — Dockerfiles and container setup
+- `docker-compose.yml` — local orchestration
+
+## Contributing
+
+Contributions are welcome. Open an issue or a PR against the `dev` branch.
+
+## License
+
+This project is available under the terms shown in the LICENSE file.

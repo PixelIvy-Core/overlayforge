@@ -1,0 +1,72 @@
+name: OverlayForge
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/API/Dockerfile
+    container_name: fastapi
+    environment:
+      - GONIC_HOST=${GONIC_HOST}
+      - GONIC_PORT=${GONIC_PORT}
+      - GONIC_USER=${GONIC_USER}
+      - GONIC_PASSWORD=${GONIC_PASSWORD}
+      - EXTERNAL_HOST=${EXTERNAL_HOST}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    ports:
+      - 8000:8000
+    networks:
+      - intern
+    restart: no
+
+  overlay:
+    build:
+      context: .
+      dockerfile: docker/Vite/Dockerfile
+      args:
+        VITE_FASTAPI_URL: ${VITE_FASTAPI_URL}
+    container_name: Vite
+    environment:
+      - VITE_FASTAPI_URL=${VITE_FASTAPI_URL}
+    ports:
+      - 3000:3000
+    networks:
+      - intern
+    restart: no
+
+  redis:
+    image: redis:alpine
+    container_name: redis_db
+    command: redis-server --appendonly yes
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data:/data
+    restart: always
+    networks:
+      - intern
+
+  gonic:
+    image: sentriz/gonic:latest
+    environment:
+      - TZ
+      - GONIC_SCAN_WATCHER_ENABLED
+      - GONIC_SCAN_AT_START_ENABLED
+      # optionally, see more available env vars in the readme
+    ports:
+      - 4747:4747
+      - 80:80
+    volumes:
+      - ./data:/data # gonic db etc
+      - ./cache:/cache # transcode / covers / etc cache dir
+      - ./Gonic/music:/music:ro # your music
+      - ./Gonic/podcasts:/podcasts # your podcasts
+      - ./Gonic/playlists:/playlists # your playlists
+    networks:
+      - intern
+
+networks:
+  intern:
+    name: intern
+    driver: bridge
