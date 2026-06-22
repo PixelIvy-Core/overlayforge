@@ -3,7 +3,7 @@ import {motion} from 'motion/react'
 export function CamFrame(){
     return(
         <div>
-            <div className='border-4 border-primary fixed w-150 h-100 bottom-20 left-7.5 m-1'></div>
+            <div className='border-4 border-primary fixed w-120.5 h-82.5 bottom-20 left-7.5 m-1'></div>
         </div>
     )
 }
