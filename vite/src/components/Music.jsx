@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSSE } from "../hooks/useSSE";
-import { useAnimate } from "motion/react";
-import { motion } from "motion/react";
+import { useAnimate, motion } from "motion/react";
 
 export function MusicBox(){  
     const API = import.meta.env.VITE_FASTAPI_URL;
@@ -28,7 +27,7 @@ export function MusicBox(){
         if (playing){
             run();
         }
-    }, [trackInfo, playing]);
+    }, [trackInfo, playing, animate, scope]);
 
     useEffect(() => {
         if (newTrack) {
@@ -65,6 +64,7 @@ export function MusicBox(){
             if (playData == "False"){
                 audio.pause();
                 animate(scope.current, {display: "none"});
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setPlaying(false);
             } else if (playData == "True"){
                 audio.play().catch(e => console.log("play blocked:", e));
@@ -72,7 +72,7 @@ export function MusicBox(){
                 setPlaying(true)
             }
         }
-    }, [playData])
+    }, [playData, animate, scope])
 
     useEffect(() => {
         const audio = audioRef.current;
