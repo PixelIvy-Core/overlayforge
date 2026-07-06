@@ -13,11 +13,12 @@ external_host = os.getenv("EXTERNAL_HOST")
 router = APIRouter(prefix="/music", tags=["music"])
 
 def setTrackInfo(id: str, title: str, artist: str, source: str):
-    track = {"id": id, "title": title, "artist": artist, "source": source, "url":  str(get_gonic_url("stream", id)).replace(gonic_host, external_host)}
+    track = {"id": id, "title": title, "artist": artist, "source": source, "url":  str(get_gonic_url("stream", id)).replace(str(gonic_host), str(external_host))}
     with get_redis() as r:
         if not r:
             raise HTTPException(503, "Redis not reachable")
-        r.hset(REDIS_INFO, mapping=track)
+        for key, value in track.items():
+            r.hset(REDIS_INFO, key=key, value=value)
         r.set(REDIS_ID, id)
         r.close()
         
@@ -39,7 +40,7 @@ async def get_playing_queue():
         r.close()
     queue_info = []
     for id in queue:
-        url = get_gonic_url("getSong", id)
+        url = get_gonic_url("getSong", str(id))
         song = get_gonic_info(url, "song")
         queue_info.append(song)
     simplified = [{"id": track["id"], "title": str(track["title"]).replace(".mp3",""), "artist": track["artist"]} for track in queue_info]
@@ -62,7 +63,7 @@ async def next_track():
         next_id = r.lpop(REDIS_QUEUE)
         r.close()
     if next_id:
-        url = get_gonic_url("getSong", next_id)
+        url = get_gonic_url("getSong", str(next_id))
         metadata = get_gonic_info(url, "song")
         setTrackInfo(metadata["id"], str.replace(metadata['title'], ".mp3", ""), metadata['artist'], metadata['album'])
     else:
@@ -116,7 +117,7 @@ async def get_play_state():
 
 
 @router.get("/getTrackInfo",response_class=EventSourceResponse, response_model=TrackInfo)
-async def get_track_info(curr_id: str) -> AsyncIterable[TrackInfo]:
+async def get_track_info(curr_id: str):
     last_track_id = curr_id
     with get_redis() as r:
         if r:
