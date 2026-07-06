@@ -1,5 +1,4 @@
 from fastapi import APIRouter, HTTPException
-from collections.abc import AsyncIterable
 from fastapi.sse import EventSourceResponse, ServerSentEvent
 from connections import get_redis, get_gonic_url, get_gonic_info
 from models import TrackInfo
